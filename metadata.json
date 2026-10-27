@@ -1,0 +1,6 @@
+{
+  "name": "TelecomSDM Lingua — Anglais Professionnel IP & Mobile (EN · FR · AR)",
+  "description": "Plateforme d'accélération en anglais professionnel pour Service Delivery Managers en téléphonie IP fixe et mobile, avec pont cognitif trilingue (Anglais, Français, Arabe), architecture de phrases et préparation de réunions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
