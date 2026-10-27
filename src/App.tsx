@@ -1,15 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Layers,
-  Award,
-  Smartphone,
-  CheckCircle2,
-  Volume2,
-  Calendar,
-} from 'lucide-react';
-import {
   ALL_95_SESSIONS,
-  SESSIONS_BY_TRACK,
   TRACKS_META,
   TrackId,
 } from './data/curriculum50Sessions';
@@ -33,7 +24,7 @@ interface PersistedStateV3 {
 }
 
 const DEFAULT_STATE: PersistedStateV3 = {
-  activeTrackId: 'b1_b2',
+  activeTrackId: 'b2_c1',
   activeSessionByTrack: {
     b1_b2: 1,
     b2_c1: 1,
@@ -68,7 +59,6 @@ export default function App() {
 
   const { isInstalled } = usePWAInstall();
 
-  // Load persisted state
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_V3);
@@ -101,7 +91,6 @@ export default function App() {
     }
   }, []);
 
-  // Save state
   useEffect(() => {
     try {
       const toSave: PersistedStateV3 = {
@@ -118,13 +107,10 @@ export default function App() {
 
   const masteredSet = useMemo(() => new Set(masteredWordIds), [masteredWordIds]);
 
-  const totalMasteredCount = masteredWordIds.length;
-  const totalWordsCount = 2850;
   const totalCompletedSessions = useMemo(
     () =>
-      ALL_95_SESSIONS.filter(
-        (s) => s.words.every((w) => masteredSet.has(w.id))
-      ).length,
+      ALL_95_SESSIONS.filter((s) => s.words.every((w) => masteredSet.has(w.id)))
+        .length,
     [masteredSet]
   );
 
@@ -185,83 +171,35 @@ export default function App() {
   const certificatesCount = Object.values(validatedCertificates).filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-slate-900 flex flex-col">
-      {/* Top Executive Navigation Header */}
-      <header className="bg-slate-950 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-3.5 gap-3">
-            {/* Brand Title */}
-            <div className="flex items-center justify-between gap-3">
-              <div
-                onClick={() => setViewMode('curriculum')}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center font-mono font-bold text-sm tracking-tight text-white shrink-0 shadow-inner">
-                  90J
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold tracking-tight text-base sm:text-lg text-white">
-                      ProEnglish 90 Jours · Accéléré & Certifiant
-                    </span>
-                    <span className="hidden sm:inline-block font-mono text-[11px] uppercase px-2 py-0.5 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded">
-                      EN 🔊 · FR · AR
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    1 Session = 1 Jour · 2 850 Mots & 2 850 Phrases Pro (B1 → B2+ · B2 → C1+ · C1+ → C2)
-                  </p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-[#F6F3EC] text-[#1C1917] flex flex-col">
+      {/* Editorial Broadsheet Masthead (Strict 3-Zone Contract, Zero Blue, Zero AI Pills) */}
+      <header className="bg-[#F6F3EC] border-b border-stone-900 sticky top-0 z-30">
+        <div className="max-w-[1380px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-8">
+          {/* Zone 1: Editorial Wordmark */}
+          <button
+            type="button"
+            onClick={() => setViewMode('curriculum')}
+            className="font-serif-editorial text-xl font-bold tracking-tight text-stone-950 whitespace-nowrap shrink-0 cursor-pointer text-left"
+          >
+            L’Anglais Pro en 90 Jours
+          </button>
 
-              {/* Mobile Install Quick Button */}
-              <button
-                type="button"
-                onClick={() => setIsInstallModalOpen(true)}
-                className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 text-white text-xs font-bold cursor-pointer"
-              >
-                <Smartphone className="w-3.5 h-3.5" />
-                <span>App</span>
-              </button>
-            </div>
-
-            {/* Right Stats & Install App Button */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="font-mono text-xs text-slate-300">
-                    Jours validés : <strong className="text-white">{totalCompletedSessions}/95</strong>
-                  </span>
-                </div>
-                <span className="text-slate-700">|</span>
-                <span className="font-mono text-xs text-teal-400 font-semibold">
-                  {totalMasteredCount} / {totalWordsCount} mots
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsInstallModalOpen(true)}
-                className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold transition-colors cursor-pointer"
-              >
-                <Smartphone className="w-4 h-4 text-teal-400" />
-                <span>
-                  {isInstalled ? 'Application Mobile Installée' : 'Application Android / iOS'}
-                </span>
-              </button>
-            </div>
-          </div>
-
-          {/* Primary Navigation Bar: 3 Category Tracks + Validation Quizzes */}
+          {/* Zone 2: Clean Editorial Navigation Links */}
           <nav
             aria-label="Navigation principale"
-            className="flex items-center gap-1.5 overflow-x-auto py-2 border-t border-slate-800/80"
+            className="flex items-center gap-5 overflow-x-auto py-1 text-sm"
           >
             {(['b1_b2', 'b2_c1', 'c1_c2'] as TrackId[]).map((trackId) => {
               const meta = TRACKS_META[trackId];
               const isSelected = viewMode === 'curriculum' && activeTrackId === trackId;
               const cert = validatedCertificates[trackId];
+
+              const navLabel =
+                trackId === 'b1_b2'
+                  ? 'I. B1 → B2+ (25 Sessions)'
+                  : trackId === 'b2_c1'
+                  ? 'II. B2 → C1+ (50 Sessions)'
+                  : 'III. C1+ → C2 (20 Sessions)';
 
               return (
                 <button
@@ -271,54 +209,53 @@ export default function App() {
                     setActiveTrackId(trackId);
                     setViewMode('curriculum');
                   }}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  title={meta.titleFR}
+                  className={`relative py-5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                     isSelected
-                      ? 'bg-teal-600 text-white shadow-xs'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                      ? 'text-stone-950 font-bold'
+                      : 'text-stone-600 hover:text-stone-950 font-medium'
                   }`}
                 >
-                  <Layers className="w-3.5 h-3.5 shrink-0" />
-                  <span>
-                    Catégorie {meta.categoryNumber} : {meta.shortTitleFR}
-                  </span>
-                  <span
-                    className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${
-                      isSelected ? 'bg-black/25 text-teal-100' : 'bg-slate-800 text-slate-400'
-                    }`}
-                  >
-                    {meta.sessionCount} Sessions · {meta.wordCount} Mots
-                  </span>
-                  {cert && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{navLabel}</span>
+                  {cert && <span className="ml-1.5 text-emerald-800">✓</span>}
+                  {isSelected && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#9A3412]" />
                   )}
                 </button>
               );
             })}
 
-            {/* Official Level Validation Quizzes Tab */}
             <button
               type="button"
               onClick={() => setViewMode('validation-quizzes')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ml-auto ${
+              className={`relative py-5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 viewMode === 'validation-quizzes'
-                  ? 'bg-amber-500 text-slate-950 shadow-xs'
-                  : 'bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25'
+                  ? 'text-stone-950 font-bold'
+                  : 'text-stone-600 hover:text-stone-950 font-medium'
               }`}
             >
-              <Award className="w-4 h-4 shrink-0" />
-              <span>Quiz de Validation des Niveaux (B2+ · C1+ · C2)</span>
-              {certificatesCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono text-[10px] font-bold">
-                  {certificatesCount}/3
-                </span>
+              <span>Examens de Niveau ({certificatesCount}/3)</span>
+              {viewMode === 'validation-quizzes' && (
+                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#9A3412]" />
               )}
             </button>
           </nav>
+
+          {/* Zone 3: Single Primary Action */}
+          <div className="flex items-center shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsInstallModalOpen(true)}
+              className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#F6F3EC] bg-stone-900 hover:bg-stone-800 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              {isInstalled ? 'App Installée' : 'Version Mobile (App)'}
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Content Container */}
+      <main className="flex-1 max-w-[1380px] w-full mx-auto px-4 sm:px-8 py-8">
         {viewMode === 'curriculum' && (
           <SessionsCurriculumView
             activeTrackId={activeTrackId}
@@ -330,6 +267,8 @@ export default function App() {
             onMarkEntireSessionMastered={handleMarkEntireSessionMastered}
             onOpenQuizForTrack={handleOpenQuizForTrack}
             onOpenInstallModal={() => setIsInstallModalOpen(true)}
+            totalCompletedSessions={totalCompletedSessions}
+            validatedCertificates={validatedCertificates}
           />
         )}
 
@@ -343,32 +282,31 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-stone-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <Volume2 className="w-4 h-4 text-teal-700" />
-            <span>
-              <strong>ProEnglish 90 Jours</strong> — 95 Sessions Quotidiennes (25 B1→B2+ · 50 B2→C1+ · 20 C1+→C2) · 2 850 Mots & 2 850 Phrases Pro
-            </span>
+      {/* Editorial Colophon Footer */}
+      <footer className="border-t border-stone-300 mt-16 bg-[#EFECE4]">
+        <div className="max-w-[1380px] mx-auto px-4 sm:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600">
+          <div>
+            <strong className="font-serif-editorial text-stone-950 text-sm">L’Anglais Pro en 90 Jours</strong> · Recueil intégral de 95 sessions quotidiennes (2 850 mots et 2 850 phrases professionnelles)
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+            <button
+              type="button"
+              onClick={() => setViewMode('validation-quizzes')}
+              className="hover:text-stone-950 underline underline-offset-4 cursor-pointer"
+            >
+              Examens de validation B2+ · C1+ · C2
+            </button>
             <button
               type="button"
               onClick={() => setIsInstallModalOpen(true)}
-              className="text-teal-700 font-semibold hover:underline cursor-pointer flex items-center gap-1"
+              className="hover:text-stone-950 underline underline-offset-4 cursor-pointer"
             >
-              <Smartphone className="w-3.5 h-3.5" />
-              Installer sur Android / iOS
+              Installer sur Android & iOS
             </button>
-            <span className="font-mono text-slate-400">
-              EN (Audio) · FR (C1) · AR (العربية)
-            </span>
           </div>
         </div>
       </footer>
 
-      {/* PWA Mobile Installation Modal */}
       <PWAInstallModal
         isOpen={isInstallModalOpen}
         onClose={() => setIsInstallModalOpen(false)}

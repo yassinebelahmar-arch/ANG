@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Award,
   CheckCircle2,
   XCircle,
   Volume2,
   Square,
   RotateCcw,
   ArrowRight,
-  ShieldCheck,
-  Sparkles,
-  BookOpen
+  BookOpen,
 } from 'lucide-react';
 import { TrackId, TRACKS_META } from '../data/curriculum50Sessions';
 import { LEVEL_VALIDATION_QUIZZES, ValidationQuizQuestion } from '../data/levelValidationQuizzes';
@@ -18,7 +15,7 @@ import {
   stopEnglishSpeech,
   subscribeToSpeechState,
   SpeechSpeed,
-  EnglishAccent
+  EnglishAccent,
 } from '../utils/speechAudio';
 
 interface LevelValidationQuizViewProps {
@@ -32,7 +29,7 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
   initialTrackId = 'b1_b2',
   validatedCertificates,
   onSaveCertificate,
-  onJumpToTrackSessions
+  onJumpToTrackSessions,
 }) => {
   const [selectedTrack, setSelectedTrack] = useState<TrackId>(initialTrackId);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
@@ -62,7 +59,7 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
     if (submitted) return;
     setSelectedAnswers((prev) => ({
       ...prev,
-      [questionId]: optionIdx
+      [questionId]: optionIdx,
     }));
   };
 
@@ -100,53 +97,45 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
   const isPassed = submitted && scorePercent >= currentQuiz.passingScorePercent;
 
   return (
-    <div className="space-y-6">
-      {/* Top Category Quiz Selector (3 Quizzes for the 3 Categories) */}
-      <div className="bg-white border border-stone-200 rounded-xl p-5 shadow-2xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-stone-200">
+    <div className="space-y-8">
+      {/* Top Category Quiz Selector (3 Official Level Exams) */}
+      <div className="border-b-2 border-stone-900 pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-6 border-b border-stone-300">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200 font-semibold">
-                Validation Officielle des Niveaux CECRL Pro
-              </span>
-              <span className="text-xs text-slate-500 font-mono">
-                Seuil de réussite : 80% (12/15)
-              </span>
+            <div className="text-xs font-mono-tabular uppercase tracking-widest text-[#9A3412] font-semibold">
+              Validation Officielle des Niveaux CECRL · Seuil de réussite : 80% (12/15)
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">
-              3 Examens de Validation : B1 → B2+ · B2 → C1+ · C1+ → C2
-            </h2>
-            <p className="text-sm text-slate-600 mt-1">
-              Testez vos connaissances sur les expressions professionnelles et obtenez votre certificat de niveau pour chaque palier du programme 90 Jours.
+            <h1 className="font-serif-editorial text-3xl sm:text-4xl text-stone-950 mt-1.5">
+              Examens de Validation : B1 → B2+ · B2 → C1+ · C1+ → C2
+            </h1>
+            <p className="text-sm text-stone-600 mt-1 max-w-2xl">
+              Validez vos acquis sur chacun des 3 volumes du programme 90 Jours avec écoute audio en anglais et corrections trilingues détaillées.
             </p>
           </div>
 
           {/* English Audio Controls */}
-          <div className="flex flex-wrap items-center gap-2 bg-stone-50 px-3.5 py-2.5 rounded-lg border border-stone-200 shrink-0">
-            <Volume2 className="w-4 h-4 text-teal-700" />
-            <span className="text-xs font-semibold text-slate-700">Voix EN :</span>
+          <div className="inline-flex items-center border border-stone-400 bg-white px-3 py-2 text-xs gap-2 shrink-0 self-start lg:self-auto">
+            <Volume2 className="w-3.5 h-3.5 text-[#9A3412]" />
+            <span className="text-stone-600">Prononciation EN :</span>
             <button
               onClick={() => setAccent(accent === 'en-US' ? 'en-GB' : 'en-US')}
-              className="px-2 py-1 text-xs font-mono font-semibold rounded bg-white border border-stone-300 text-slate-800 hover:bg-stone-100 cursor-pointer"
+              className="font-mono-tabular font-bold text-stone-950 underline cursor-pointer"
             >
-              {accent === 'en-US' ? 'US (Américain)' : 'UK (Britannique)'}
+              {accent === 'en-US' ? 'US' : 'UK'}
             </button>
+            <span className="text-stone-300">|</span>
             <button
               onClick={() => setSpeechSpeed(speechSpeed === 1 ? 0.82 : 1)}
-              className={`px-2 py-1 text-xs font-mono font-semibold rounded border cursor-pointer ${
-                speechSpeed === 0.82
-                  ? 'bg-amber-100 border-amber-300 text-amber-900'
-                  : 'bg-white border-stone-300 text-slate-800 hover:bg-stone-100'
-              }`}
+              className="font-mono-tabular font-bold text-stone-950 underline cursor-pointer"
             >
-              {speechSpeed === 1 ? 'Vitesse 1.0x' : 'Lent 0.85x'}
+              {speechSpeed === 1 ? '1.0x' : '0.85x Lent'}
             </button>
           </div>
         </div>
 
         {/* 3 Track Quiz Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-          {(['b1_b2', 'b2_c1', 'c1_c2'] as TrackId[]).map((trackId) => {
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-300 pt-6">
+          {(['b1_b2', 'b2_c1', 'c1_c2'] as TrackId[]).map((trackId, index) => {
             const meta = TRACKS_META[trackId];
             const quiz = LEVEL_VALIDATION_QUIZZES[trackId];
             const cert = validatedCertificates[trackId];
@@ -156,52 +145,37 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
               <button
                 key={trackId}
                 onClick={() => handleSwitchTrack(trackId)}
-                className={`text-left p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+                className={`text-left p-5 transition-colors cursor-pointer flex flex-col justify-between ${
+                  index === 0 ? 'md:pr-6' : index === 1 ? 'md:px-6' : 'md:pl-6'
+                } ${
                   isActive
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                    : 'bg-stone-50/70 hover:bg-white text-slate-900 border-stone-200'
+                    ? 'bg-white border-t-4 border-t-[#9A3412] shadow-2xs'
+                    : 'hover:bg-white/60'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span
-                      className={`text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-semibold ${
-                        isActive
-                          ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
-                          : 'bg-white text-slate-700 border border-stone-200'
-                      }`}
-                    >
+                  <div className="flex items-center justify-between gap-2 text-xs font-mono-tabular">
+                    <span className={isActive ? 'text-[#9A3412] font-bold' : 'text-stone-500 font-semibold'}>
                       {quiz.badgeLabel}
                     </span>
                     {cert ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Validé ({cert.score}/{cert.total})
+                      <span className="text-[#14532D] font-bold">
+                        ✓ Validé ({cert.score}/{cert.total})
                       </span>
                     ) : (
-                      <span
-                        className={`text-[11px] font-mono ${
-                          isActive ? 'text-slate-400' : 'text-slate-500'
-                        }`}
-                      >
-                        15 questions
-                      </span>
+                      <span className="text-stone-500">15 questions</span>
                     )}
                   </div>
-                  <h3 className="text-base font-bold mt-2.5">
-                    Catégorie {meta.categoryNumber} : {meta.shortTitleFR}
-                  </h3>
-                  <p
-                    className={`text-xs mt-1 ${
-                      isActive ? 'text-slate-300' : 'text-slate-600'
-                    }`}
-                  >
-                    Basé sur les {meta.sessionCount} sessions ({meta.wordCount} mots · {meta.dayRangeLabel})
+                  <h2 className="font-serif-editorial text-xl font-semibold text-stone-950 mt-2">
+                    {meta.shortTitleFR}
+                  </h2>
+                  <p className="text-xs text-stone-600 mt-1">
+                    {meta.sessionCount} sessions · {meta.wordCount} mots · {meta.dayRangeLabel}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-700/20 flex items-center justify-between text-xs font-semibold">
-                  <span>{cert ? 'Repasser l’examen' : 'Passer l’examen de validation'}</span>
+                <div className="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between text-xs font-semibold text-[#9A3412]">
+                  <span>{cert ? 'Repasser l’examen' : 'Sélectionner cet examen'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </button>
@@ -213,65 +187,53 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
       {/* Exam Result & Certificate Banner (when submitted) */}
       {submitted && (
         <div
-          className={`p-6 rounded-xl border shadow-sm ${
+          className={`p-6 sm:p-8 border-2 ${
             isPassed
-              ? 'bg-emerald-950 text-white border-emerald-700'
-              : 'bg-amber-50 text-slate-900 border-amber-300'
+              ? 'bg-[#F2F6F3] text-stone-950 border-[#14532D]'
+              : 'bg-white text-stone-950 border-[#9A3412]'
           }`}
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 text-xs font-mono uppercase tracking-wider">
+              <div className="text-xs font-mono-tabular uppercase tracking-widest">
                 {isPassed ? (
-                  <>
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span className="text-emerald-200 font-bold">
-                      NIVEAU OFFICIELLEMENT VALIDÉ · {currentQuiz.certificateLevelCode}
-                    </span>
-                  </>
+                  <span className="text-[#14532D] font-bold">
+                    ✓ Certificat Officiellement Validé · {currentQuiz.certificateLevelCode}
+                  </span>
                 ) : (
-                  <>
-                    <RotateCcw className="w-4 h-4 text-amber-800" />
-                    <span className="text-amber-900 font-bold">
-                      SCORE INSUFFISANT POUR LA CERTIFICATION (MINIMUM 80% REQUIS)
-                    </span>
-                  </>
+                  <span className="text-[#9A3412] font-bold">
+                    Score insuffisant pour la certification (Minimum 80% requis)
+                  </span>
                 )}
               </div>
 
-              <h3 className="text-2xl font-bold">
+              <h3 className="font-serif-editorial text-2xl font-bold">
                 {isPassed
                   ? currentQuiz.certificateTitleFR
                   : `Score obtenu : ${score} / ${totalQuestions} (${scorePercent}%)`}
               </h3>
 
-              <p className={`text-sm ${isPassed ? 'text-emerald-100' : 'text-slate-700'}`}>
+              <p className="text-sm text-stone-700">
                 {isPassed
-                  ? `Félicitations ! Vous avez obtenu ${score}/${totalQuestions} (${scorePercent}%). Vous maîtrisez le lexique et les structures de phrases professionnelles de cette catégorie.`
-                  : `Il vous faut au moins 12 bonnes réponses sur 15 (80%) pour valider ce palier. Consultez les explications trilingues ci-dessous puis réessayez.`}
+                  ? `Félicitations ! Vous avez obtenu ${score}/${totalQuestions} (${scorePercent}%). Votre certificat de niveau est enregistré.`
+                  : `Il vous faut au moins 12 bonnes réponses sur 15 (80%) pour valider ce palier. Consultez les explications ci-dessous puis réessayez.`}
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <div
-                className={`px-5 py-3 rounded-xl text-center border ${
-                  isPassed
-                    ? 'bg-emerald-900/70 border-emerald-600 text-white'
-                    : 'bg-white border-amber-300 text-slate-900'
-                }`}
-              >
-                <div className="text-xs font-mono uppercase opacity-75">Score Final</div>
-                <div className="text-2xl font-bold font-mono">
+              <div className="px-5 py-3 bg-white border border-stone-300 text-center">
+                <div className="text-xs font-mono-tabular text-stone-500">Score Final</div>
+                <div className="font-serif-editorial text-2xl font-bold font-mono-tabular">
                   {score}/{totalQuestions} ({scorePercent}%)
                 </div>
               </div>
 
               <button
                 onClick={handleResetQuiz}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white text-slate-900 hover:bg-stone-100 font-semibold text-xs border border-stone-300 cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-3 bg-stone-900 text-white hover:bg-stone-800 font-semibold text-xs cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
-                Recommencer le Quiz
+                <span>Recommencer</span>
               </button>
             </div>
           </div>
@@ -279,11 +241,11 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
       )}
 
       {/* Active Quiz Header Bar */}
-      <div className="bg-white border border-stone-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-stone-300 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-lg font-bold text-slate-900">{currentQuiz.titleFR}</h3>
-          <p className="text-xs text-slate-600 mt-0.5">{currentQuiz.subtitleFR}</p>
-          <p className="text-xs font-medium text-teal-800 mt-1" dir="rtl">
+          <h2 className="font-serif-editorial text-2xl text-stone-950">{currentQuiz.titleFR}</h2>
+          <p className="text-xs text-stone-600 mt-1">{currentQuiz.subtitleFR}</p>
+          <p className="text-xs font-medium text-[#14532D] font-arabic mt-1" dir="rtl">
             {currentQuiz.titleAR}
           </p>
         </div>
@@ -291,74 +253,61 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => onJumpToTrackSessions(selectedTrack)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-300 bg-stone-50 hover:bg-stone-100 text-xs font-semibold text-slate-700 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-stone-300 bg-[#F6F3EC] hover:border-stone-900 text-xs font-semibold text-stone-800 cursor-pointer whitespace-nowrap"
           >
-            <BookOpen className="w-3.5 h-3.5 text-teal-700" />
-            Réviser les sessions
+            <BookOpen className="w-3.5 h-3.5 text-[#9A3412]" />
+            <span>Réviser les sessions</span>
           </button>
-          <div className="px-3.5 py-2 rounded-lg bg-slate-900 text-white text-xs font-mono font-semibold">
+          <div className="px-4 py-2 bg-stone-900 text-white text-xs font-mono-tabular font-semibold whitespace-nowrap">
             Répondu : {answeredCount} / {totalQuestions}
           </div>
         </div>
       </div>
 
       {/* Questions List */}
-      <div className="space-y-4">
+      <div className="bg-white border border-stone-300 divide-y divide-stone-200">
         {questions.map((q: ValidationQuizQuestion) => {
           const userChoice = selectedAnswers[q.id];
-          const isAnswered = userChoice !== undefined;
           const isCorrect = submitted && userChoice === q.correctIndex;
-          const isWrong = submitted && userChoice !== q.correctIndex;
           const playPromptId = `quiz-prompt-${q.id}`;
           const playFullId = `quiz-full-${q.id}`;
 
           return (
-            <div
-              key={q.id}
-              className={`bg-white rounded-xl border p-5 transition-all ${
-                submitted
-                  ? isCorrect
-                    ? 'border-emerald-400 bg-emerald-50/20'
-                    : 'border-rose-300 bg-rose-50/20'
-                  : isAnswered
-                  ? 'border-teal-500/60 shadow-2xs'
-                  : 'border-stone-200'
-              }`}
-            >
+            <div key={q.id} className="p-6 space-y-4">
               {/* Question Top Metadata */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-100">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded bg-slate-900 text-white font-mono text-xs font-bold">
-                    Question #{String(q.questionNumber).padStart(2, '0')}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-xs font-mono-tabular text-stone-500">
+                  <span className="font-serif-editorial text-base font-bold text-[#9A3412]">
+                    {String(q.questionNumber).padStart(2, '0')}.
                   </span>
-                  <span className="text-xs font-mono text-slate-500 bg-stone-100 px-2 py-0.5 rounded">
-                    {q.sessionRef}
+                  <span className="font-bold text-stone-900">
+                    Question {q.questionNumber} sur {totalQuestions}
                   </span>
+                  <span>·</span>
+                  <span>{q.sessionRef}</span>
                 </div>
 
-                {/* Audio button for the full English sentence */}
                 <button
                   onClick={() =>
                     speakEnglishText(q.fullSentenceEN, playPromptId, {
                       rate: speechSpeed,
-                      accent
+                      accent,
                     })
                   }
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 border text-xs font-semibold transition-colors cursor-pointer ${
                     playingId === playPromptId
-                      ? 'bg-teal-700 text-white border-teal-700'
-                      : 'bg-teal-50 hover:bg-teal-100 text-teal-900 border-teal-200'
+                      ? 'bg-[#9A3412] text-white border-[#9A3412]'
+                      : 'bg-[#F6F3EC] hover:bg-stone-200 text-stone-900 border-stone-300'
                   }`}
-                  title="Écouter la phrase complète en anglais"
                 >
                   {playingId === playPromptId ? (
                     <>
                       <Square className="w-3 h-3 fill-current" />
-                      <span>Arrêter l’écoute (EN)</span>
+                      <span>Stop</span>
                     </>
                   ) : (
                     <>
-                      <Volume2 className="w-3.5 h-3.5" />
+                      <Volume2 className="w-3.5 h-3.5 text-[#9A3412]" />
                       <span>Écouter la phrase (EN)</span>
                     </>
                   )}
@@ -366,81 +315,86 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
               </div>
 
               {/* Trilingual Context (FR + AR Situation) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 my-3.5 p-3.5 rounded-lg bg-stone-50 border border-stone-200/80">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-3 px-4 bg-[#F6F3EC] border border-stone-200">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
-                    Situation Professionnelle (FR)
+                  <span className="text-[11px] font-mono-tabular uppercase text-stone-500 block">
+                    Situation professionnelle (FR)
                   </span>
-                  <p className="text-xs text-slate-800 font-medium mt-0.5">{q.scenarioFR}</p>
-                  <p className="text-xs text-teal-800 font-semibold mt-1">
+                  <p className="text-xs text-stone-800 mt-0.5 leading-relaxed">
+                    {q.scenarioFR}
+                  </p>
+                  <p className="text-xs text-[#9A3412] font-semibold mt-1">
                     Sens recherché : « {q.targetWordFR} »
                   </p>
                 </div>
-                <div dir="rtl" className="border-t md:border-t-0 md:border-r border-stone-200 pt-2 md:pt-0 md:pr-3">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
+                <div
+                  dir="rtl"
+                  className="border-t md:border-t-0 md:border-r border-stone-300 pt-3 md:pt-0 md:pr-5 font-arabic"
+                >
+                  <span className="text-[11px] font-mono-tabular text-stone-500 block">
                     السياق المهني (AR)
                   </span>
-                  <p className="text-xs text-slate-800 font-medium mt-0.5">{q.scenarioAR}</p>
-                  <p className="text-xs text-teal-800 font-semibold mt-1">
+                  <p className="text-xs text-stone-800 mt-0.5 leading-relaxed">
+                    {q.scenarioAR}
+                  </p>
+                  <p className="text-xs text-[#14532D] font-bold mt-1">
                     المعنى المطلوب: « {q.targetWordAR} »
                   </p>
                 </div>
               </div>
 
               {/* English Sentence with Blank */}
-              <div className="p-3.5 rounded-lg bg-slate-900 text-white font-medium text-sm sm:text-base leading-relaxed">
+              <div className="p-4 bg-stone-900 text-[#F6F3EC] font-serif-editorial text-base sm:text-lg leading-relaxed">
                 {q.promptEN}
               </div>
 
               {/* 4 English Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {q.optionsEN.map((opt, idx) => {
                   const isSelected = userChoice === idx;
                   const isRightAnswer = q.correctIndex === idx;
 
                   let btnStyle =
-                    'bg-white hover:bg-stone-50 text-slate-800 border-stone-300';
+                    'bg-white hover:bg-[#F6F3EC] text-stone-900 border-stone-300';
                   if (!submitted && isSelected) {
-                    btnStyle = 'bg-teal-700 text-white border-teal-700 shadow-xs';
+                    btnStyle = 'bg-stone-900 text-white border-stone-900';
                   } else if (submitted) {
                     if (isRightAnswer) {
-                      btnStyle =
-                        'bg-emerald-600 text-white border-emerald-600 font-bold';
+                      btnStyle = 'bg-[#14532D] text-white border-[#14532D] font-bold';
                     } else if (isSelected && !isRightAnswer) {
-                      btnStyle = 'bg-rose-600 text-white border-rose-600';
+                      btnStyle = 'bg-[#9A3412] text-white border-[#9A3412]';
                     } else {
-                      btnStyle = 'bg-stone-50 text-slate-400 border-stone-200';
+                      btnStyle = 'bg-stone-50 text-stone-400 border-stone-200';
                     }
                   }
 
                   return (
                     <div
                       key={idx}
-                      className={`flex items-center justify-between gap-2 p-3 rounded-lg border text-xs sm:text-sm transition-all ${btnStyle}`}
+                      className={`flex items-center justify-between gap-2 p-3 border text-xs sm:text-sm transition-colors ${btnStyle}`}
                     >
                       <button
                         type="button"
                         onClick={() => handleSelectOption(q.id, idx)}
                         disabled={submitted}
-                        className="flex-1 text-left flex items-center gap-2.5 cursor-pointer disabled:cursor-default"
+                        className="flex-1 text-left flex items-center gap-3 cursor-pointer disabled:cursor-default"
                       >
-                        <span className="w-6 h-6 rounded-md bg-black/15 font-mono text-xs flex items-center justify-center shrink-0">
-                          {String.fromCharCode(65 + idx)}
+                        <span className="font-mono-tabular text-xs font-bold">
+                          {String.fromCharCode(65 + idx)}.
                         </span>
                         <span className="font-semibold">{opt}</span>
                       </button>
 
-                      {/* Listen to this English option word */}
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           speakEnglishText(opt, `opt-${q.id}-${idx}`, {
                             rate: speechSpeed,
-                            accent
+                            accent,
                           });
                         }}
-                        className="p-1.5 rounded hover:bg-black/10 transition-colors cursor-pointer shrink-0"
+                        className="p-1.5 hover:opacity-75 transition-opacity cursor-pointer shrink-0"
                         title={`Écouter "${opt}" en anglais`}
                       >
                         <Volume2 className="w-3.5 h-3.5" />
@@ -453,25 +407,25 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
               {/* Post-submission Trilingual Explanation */}
               {submitted && (
                 <div
-                  className={`mt-4 p-4 rounded-lg border text-xs space-y-2 ${
+                  className={`p-4 border text-xs space-y-2 ${
                     isCorrect
-                      ? 'bg-emerald-50 border-emerald-200 text-emerald-950'
-                      : 'bg-amber-50 border-amber-200 text-slate-900'
+                      ? 'bg-[#F2F6F3] border-[#14532D] text-stone-900'
+                      : 'bg-[#FAF5F0] border-[#9A3412] text-stone-900'
                   }`}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2 font-bold text-sm">
                       {isCorrect ? (
                         <>
-                          <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                          <span className="text-emerald-900">
+                          <CheckCircle2 className="w-4 h-4 text-[#14532D]" />
+                          <span className="text-[#14532D]">
                             Bonne réponse : « {q.optionsEN[q.correctIndex]} »
                           </span>
                         </>
                       ) : (
                         <>
-                          <XCircle className="w-4 h-4 text-rose-700" />
-                          <span className="text-rose-900">
+                          <XCircle className="w-4 h-4 text-[#9A3412]" />
+                          <span className="text-[#9A3412]">
                             Réponse attendue : « {q.optionsEN[q.correctIndex]} »
                           </span>
                         </>
@@ -482,23 +436,23 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
                       onClick={() =>
                         speakEnglishText(q.fullSentenceEN, playFullId, {
                           rate: speechSpeed,
-                          accent
+                          accent,
                         })
                       }
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900 text-white font-semibold cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-900 text-white font-semibold cursor-pointer"
                     >
                       <Volume2 className="w-3.5 h-3.5" />
-                      <span>Réécouter la phrase complète (EN)</span>
+                      <span>Réécouter la phrase (EN)</span>
                     </button>
                   </div>
 
-                  <p className="font-mono text-xs bg-white/80 p-2.5 rounded border border-black/10 text-slate-900">
-                    <strong>EN :</strong> {q.fullSentenceEN}
+                  <p className="font-medium text-xs text-stone-900 pt-1">
+                    <strong>Phrase complète (EN) :</strong> “{q.fullSentenceEN}”
                   </p>
-                  <p className="text-slate-800">
+                  <p className="text-stone-700">
                     <strong>Explication (FR) :</strong> {q.explanationFR}
                   </p>
-                  <p className="text-slate-800" dir="rtl">
+                  <p className="text-stone-800 font-arabic" dir="rtl">
                     <strong>الشرح (AR) :</strong> {q.explanationAR}
                   </p>
                 </div>
@@ -510,24 +464,20 @@ export const LevelValidationQuizView: React.FC<LevelValidationQuizViewProps> = (
 
       {/* Submit Exam Footer */}
       {!submitted && (
-        <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div className="flex items-center gap-3">
-            <Award className="w-8 h-8 text-amber-400 shrink-0" />
-            <div>
-              <h4 className="text-sm font-bold">
-                Prêt à valider votre certificat {currentQuiz.certificateLevelCode} ?
-              </h4>
-              <p className="text-xs text-slate-300">
-                Vous avez répondu à {answeredCount} question(s) sur {totalQuestions}. Un score de 12/15 (80%) valide officiellement ce niveau.
-              </p>
-            </div>
+        <div className="bg-stone-900 text-[#F6F3EC] p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h4 className="font-serif-editorial text-lg">
+              Validation du Certificat {currentQuiz.certificateLevelCode}
+            </h4>
+            <p className="text-xs text-stone-300 mt-0.5">
+              Vous avez répondu à {answeredCount} question(s) sur {totalQuestions}. Un score de 12/15 (80%) valide officiellement ce niveau.
+            </p>
           </div>
 
           <button
             onClick={handleSubmitExam}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm transition-colors cursor-pointer shadow-md"
+            className="w-full sm:w-auto px-6 py-3 bg-[#9A3412] hover:bg-[#7C2D12] text-white font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer whitespace-nowrap"
           >
-            <ShieldCheck className="w-4 h-4" />
             Valider mes réponses & Calculer mon niveau
           </button>
         </div>
